@@ -1,0 +1,14 @@
+-- AlterTable
+ALTER TABLE "cards" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ;
+
+-- AlterTable
+ALTER TABLE "credentials" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ;
+
+-- AlterTable
+ALTER TABLE "networks" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ;
+
+-- AlterTable
+ALTER TABLE "safeNotes" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ;
+
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ;

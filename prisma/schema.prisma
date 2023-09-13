@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @db.Timestamptz()
+
+  credential Credential[]
+  safeNote   SafeNote[]
+  card       Card[]
+  network    Network[]
+  document   Document[]
+
+  @@map("users")
+}
+
+model Credential {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(50)
+  url       String
+  username  String   @db.VarChar(25)
+  password  String
+  createdAt DateTime @default(now()) @db.Timestamptz()
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@unique([title, userId])
+  @@map("credentials")
+}
+
+model SafeNote {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(50)
+  annotation String   @db.VarChar(1000)
+  createdAt  DateTime @default(now()) @db.Timestamptz()
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@unique([title, userId])
+  @@map("safeNotes")
+}
+
+model Card {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(50)
+  number         String   @db.VarChar(16)
+  cardHolderName String   @db.VarChar(255)
+  securityCode   String
+  expirationDate String   @db.Char(5)
+  password       String
+  isVirtual      Boolean
+  type           CardType
+  createdAt      DateTime @default(now()) @db.Timestamptz()
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@unique([title, userId])
+  @@map("cards")
+}
+
+enum CardType {
+  credit
+  debit
+  credit_debit
+}
+
+model Network {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(50)
+  name      String   @db.VarChar(50)
+  password  String
+  createdAt DateTime @default(now()) @db.Timestamptz()
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("networks")
+}
+
+model Document {
+  id             Int      @id @default(autoincrement())
+  type           DocType
+  fullName       String   @db.VarChar(50)
+  issueDate      DateTime
+  expirationDate DateTime
+  registerNumber Int
+  issuerEntity   String   @db.VarChar(50)
+  createdAt      DateTime @default(now()) @db.Timestamptz()
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("documents")
+}
+
+enum DocType {
+  RG
+  CPF
+}

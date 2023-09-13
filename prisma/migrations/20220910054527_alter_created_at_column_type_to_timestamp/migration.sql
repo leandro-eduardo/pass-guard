@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "cards" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMP;
